@@ -1,0 +1,3 @@
+FROM flink:1.17
+
+RUN pip install apache-flink
