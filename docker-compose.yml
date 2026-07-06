@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
 
   # ===================== ZOOKEEPER =====================
@@ -25,11 +23,8 @@ services:
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-
-      # listeners (IMPORTANT FIX)
       KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
-
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       ALLOW_PLAINTEXT_LISTENER: "yes"
     networks:
@@ -45,10 +40,10 @@ services:
       - ES_JAVA_OPTS=-Xms512m -Xmx512m
     ports:
       - "9200:9200"
-    networks:
-      - bigdata-network
     volumes:
       - es_data:/usr/share/elasticsearch/data
+    networks:
+      - bigdata-network
 
   # ===================== KIBANA =====================
   kibana:
@@ -63,23 +58,9 @@ services:
     networks:
       - bigdata-network
 
-  # ===================== MONGODB =====================
-  mongodb:
-    image: mongo:6
-    container_name: mongodb
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo_data:/data/db
-    networks:
-      - bigdata-network
-
-# ===================== NETWORK =====================
 networks:
   bigdata-network:
     driver: bridge
 
-# ===================== VOLUMES =====================
 volumes:
-  mongo_data:
   es_data:

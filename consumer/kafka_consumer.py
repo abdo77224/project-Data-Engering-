@@ -1,5 +1,4 @@
 from kafka import KafkaConsumer
-from pymongo import MongoClient
 from elasticsearch import Elasticsearch
 import json
 
@@ -16,29 +15,16 @@ consumer = KafkaConsumer(
 print("Connected to Kafka...")
 
 # ==========================
-# MongoDB
-# ==========================
-mongo_client = MongoClient("mongodb://localhost:27017/")
-
-mongo_db = mongo_client["twitter_db"]
-
-mongo_collection = mongo_db["tweets"]
-
-print("Connected to MongoDB...")
-
-# ==========================
 # Elasticsearch
 # ==========================
 es = Elasticsearch("http://localhost:9200")
 
 print("Connected to Elasticsearch...")
-
 print("Waiting for tweets...\n")
 
 # ==========================
 # Streaming
 # ==========================
-
 for message in consumer:
 
     tweet = message.value
@@ -55,9 +41,6 @@ for message in consumer:
         "label": tweet["label"],
         "sentiment": sentiment
     }
-
-    # MongoDB
-    mongo_collection.insert_one(document)
 
     # Elasticsearch
     es.index(index="tweets", document=document)
